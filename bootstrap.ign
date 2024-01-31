@@ -1,0 +1,47 @@
+{
+  "ignition": {
+    "version": "3.1.0"
+  },
+  "storage": {
+    "files": [
+      {
+        "path": "/usr/local/bin/setup_python.sh",
+        "contents": {
+          "compression": "",
+          "source": "data:,%23!%2Fbin%2Fbash%0Aecho%20%22Setting%20up%20Python%22%0A"
+        },
+        "mode": 493
+      },
+      {
+        "path": "/usr/local/bin/setup_server.py",
+        "contents": {
+          "compression": "",
+          "source": "data:,%23!%2Fbin%2Fbash%0Aecho%20%22Setting%20up%20Python%20server%22%0A"
+        },
+        "mode": 493
+      },
+      {
+        "path": "/usr/local/bin/master.ign",
+        "contents": {
+          "compression": "",
+          "source": "data:,%22Ignition%20user%22%0A"
+        },
+        "mode": 493
+      }
+    ]
+  },
+  "systemd": {
+    "units": [
+      {
+        "contents": "[Unit]\nDescription=Setup bootstrapping server\n[Service]\nType=oneshot\nExecStart=/usr/local/bin/bash /usr/local/bin/setup-python.sh\nRemainAfterExit=true\nStandardOutput=journal\n[Install]\nWantedBy=multi-user.target\n",
+        "enabled": true,
+        "name": "setup.service"
+      },
+      {
+        "contents": "[Unit]\nDescription=An HTTP server serving master ignition\n[Service]\nType=oneshot\nRemainAfterExit=yes\nExecStart=/usr/bin/setup_server.py \"\"\n[Install]\nWantedBy=multi-user.target\n",
+        "enabled": true,
+        "name": "server.service"
+      }
+    ]
+  }
+}
